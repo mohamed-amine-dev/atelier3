@@ -1,0 +1,21 @@
+# Connect to WildFly
+connect
+
+# Add H2 module if not exists
+module add --name=com.h2database.h2 --resources=${env.HOME}/.m2/repository/com/h2database/h2/2.2.224/h2-2.2.224.jar --dependencies=javax.api,javax.transaction.api,javax.servlet.api
+
+# Add H2 Driver
+/subsystem=datasources/jdbc-driver=h2:add(driver-name="h2",driver-module-name="com.h2database.h2",driver-class-name=org.h2.Driver)
+
+# Add H2 Datasource
+data-source add \
+    --name=H2DS \
+    --jndi-name=java:/h2DS \
+    --driver-name=h2 \
+    --connection-url="jdbc:h2:mem:atelier3;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE" \
+    --user-name=sa \
+    --password="" \
+    --use-java-context=true \
+    --enabled=true \
+    --jta=true \
+    --max-pool-size=20

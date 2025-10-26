@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Products</title>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
+    <style type="text/css">
+        .layout-main {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .products-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .products-header {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .cart-summary {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="layout-main">
+        <div class="products-header">
+            <h1 class="text-6xl font-bold mb-2">Our Products</h1>
+            <p class="text-2xl">Browse our amazing collection</p>
+        </div>
+
+        <div class="products-container">
+            <h:form id="productsForm">
+                <div class="mb-3">
+                    <p:commandButton value="Back to Home" 
+                                   action="index.xhtml"
+                                   icon="pi pi-home"
+                                   styleClass="p-button-secondary p-button-rounded"/>
+                </div>
+                <p:dataTable value="#{productManager.allProducts}" 
+                           var="p" 
+                           paginator="true" 
+                           rows="10"
+                           paginatorPosition="bottom"
+                           emptyMessage="No products available">
+                    
+                    <p:column headerText="Product" styleClass="w-4">
+                        <div class="text-lg font-bold mb-2">#{p.name}</div>
+                        <div class="text-gray-600">#{p.description}</div>
+                    </p:column>
+                    
+                    <p:column headerText="Price" styleClass="w-2">
+                        <h:outputText value="#{p.price}" styleClass="text-lg">
+                            <f:convertNumber type="currency" currencySymbol="$" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Action" styleClass="w-2">
+                        <p:commandButton value="Add to Cart" 
+                                       action="#{cartBean.add(p)}" 
+                                       update=":productsForm :cartSummary"
+                                       icon="pi pi-shopping-cart"
+                                       styleClass="p-button-success p-button-rounded"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+
+        <h:form id="cartSummary" styleClass="cart-summary">
+            <span class="font-bold">
+                <h:outputText value="#{cartBean.count}"/> items
+            </span>
+            <p:commandButton value="View Cart" 
+                           icon="pi pi-shopping-cart" 
+                           action="cart.xhtml"
+                           styleClass="p-button-info p-button-rounded"
+                           rendered="#{cartBean.count > 0}"/>
+        </h:form>
+    </div>
+</h:body>
+</html>

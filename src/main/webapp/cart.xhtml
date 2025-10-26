@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Shopping Cart</title>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
+    <style type="text/css">
+        .layout-main {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .cart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .cart-header {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: right;
+            margin: 1rem 0;
+        }
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="layout-main">
+        <div class="cart-header">
+            <h1 class="text-6xl font-bold mb-2">Your Shopping Cart</h1>
+        </div>
+
+        <div class="cart-container">
+            <h:form id="cartForm">
+                <p:dataTable id="cartTable" 
+                           value="#{cartBean.items}" 
+                           var="it"
+                           emptyMessage="Your cart is empty"
+                           styleClass="mb-3">
+                    <p:column headerText="Product" styleClass="w-4">
+                        <h:outputText value="#{it.product.name}" styleClass="font-bold"/>
+                    </p:column>
+                    <p:column headerText="Price" styleClass="w-2">
+                        <h:outputText value="#{it.product.price}">
+                            <f:convertNumber type="currency" currencySymbol="$"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Quantity" styleClass="w-2">
+                        <p:inputNumber value="#{it.quantity}" 
+                                    minValue="1" 
+                                    maxValue="99"
+                                    decimalPlaces="0"
+                                    style="width:70px"
+                                    spinnerMode="true">
+                            <p:ajax event="valueChange" 
+                                   process="@this" 
+                                   update=":cartForm:cartTable :cartForm:total"/>
+                        </p:inputNumber>
+                    </p:column>
+                    <p:column headerText="Subtotal" styleClass="w-2">
+                        <h:outputText value="#{it.subtotal}">
+                            <f:convertNumber type="currency" currencySymbol="$"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Action" styleClass="w-2">
+                        <p:commandButton icon="pi pi-trash" 
+                                       action="#{cartBean.remove(it.product.id)}"
+                                       update=":cartForm:cartTable :cartForm:total"
+                                       styleClass="p-button-danger p-button-rounded"
+                                       title="Remove Item"/>
+                    </p:column>
+                </p:dataTable>
+
+                <div class="cart-total">
+                    <h:outputText id="total" value="Total: #{cartBean.total}">
+                        <f:convertNumber type="currency" currencySymbol="$"/>
+                    </h:outputText>
+                </div>
+
+                <div class="cart-actions">
+                    <p:commandButton value="Continue Shopping" 
+                                   action="products.xhtml"
+                                   icon="pi pi-arrow-left"
+                                   styleClass="p-button-secondary"/>
+                    
+                    <p:commandButton value="Checkout" 
+                                   action="#{cartBean.checkout}"
+                                   icon="pi pi-check"
+                                   styleClass="p-button-success"
+                                   disabled="#{empty cartBean.items}"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+</h:body>
+</html>
