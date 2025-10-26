@@ -1,28 +1,124 @@
-Atelier3 - Mini e-Commerce (JSF + JPA)
+# Atelier3 
+# Application Web E-Commerce avec JSF et JPA
 
-This project is a small demo app built with JSF (PrimeFaces) and JPA (Hibernate) to practice building an e-commerce-like cart and product catalog.
+## Description
 
-Prerequisites
-- Java 17+ (project currently set to compile with Java 23 in pom; adjust if needed)
-- Maven
-- MySQL server
-- WildFly or any Jakarta EE compatible app server (WildFly recommended)
+Application web de simulation d'un site e-commerce développée avec les technologies JSF (JavaServer Faces) et JPA (Java Persistence API).
 
-Setup
-1. Update database connection in `src/main/resources/META-INF/persistence.xml` (URL, user, password).
-2. Create database `atelier3_db` in MySQL:
+## Objectif
 
-   CREATE DATABASE atelier3_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+Maîtriser l'API JPA (Java Persistence API) et le Framework JSF par la mise en place d'une application web qui simule le comportement d'un site web e-commerce.
 
-3. Build WAR:
+## Technologies Utilisées
 
-   mvn clean package
+- **IDE** : IntelliJ IDEA
+- **Gestion de projet** : Maven
+- **Serveur d'application** : Wildfly
+- **Base de données** : MySQL
+- **Framework web** : JSF 4.0
+- **Persistance** : JPA 3.0
+- **ORM** : Hibernate / EclipseLink
+- **Injection de dépendances** : CDI
+- **Bibliothèque UI** : PrimeFaces
 
-4. Deploy the generated `target/atelier3.war` to WildFly (or run via Maven plugin / embedded server).
+## Architecture
 
-Notes
-- The project will auto-create sample products on first deploy (EJB `ProductService` seeds the data).
-- For development you can also run on a servlet container that supports Jakarta EE APIs.
+L'application se concentre sur la gestion de trois modules principaux :
+- **Panier** : Gestion du panier d'achat des utilisateurs
+- **Vitrine** : Affichage des produits disponibles
+- **Internaute** : Gestion des utilisateurs/clients
 
-Report
-See `REPORT.md` for a short mini-report about the design and steps completed.
+## Étapes de Développement
+
+### Étape 1 : Conception
+Créer un diagramme de classes représentant la gestion du site e-commerce, en se concentrant particulièrement sur :
+- La gestion du panier
+- La vitrine de produits
+- Les internautes (utilisateurs)
+
+### Étape 2 : Création du Projet
+Créer un projet web Maven contenant les modules suivants :
+- JSF (JavaServer Faces)
+- JPA (Java Persistence API)
+- CDI (Contexts and Dependency Injection)
+- EclipseLink (ou Hibernate)
+- Connecteur MySQL
+
+### Étape 3 : Couche de Persistance
+- Créer les entités JPA correspondant au modèle de données
+- Configurer les transactions JPA
+- Générer automatiquement la base de données MySQL à partir des entités
+- Mettre en place les fichiers de configuration nécessaires :
+  - `persistence.xml`
+  - Configuration de la source de données
+
+### Étape 4 : Couche Présentation
+Pour chaque module de gestion :
+- Créer une classe Bean (Managed Bean)
+- Développer plusieurs composants XHTML basés sur JSF
+- Intégrer la bibliothèque de composants UI PrimeFaces
+
+## Configuration Requise
+
+### Base de Données
+- MySQL installé et configuré
+- Créer une base de données dédiée pour l'application
+
+### Serveur d'Application
+- Wildfly correctement configuré
+- Déploiement de l'application sur Wildfly
+
+### Dépendances Maven
+Ajouter les dépendances suivantes dans le `pom.xml` :
+- JSF 4.0
+- JPA 3.0
+- Hibernate ou EclipseLink
+- MySQL Connector
+- PrimeFaces
+
+## Ressources
+
+- **PrimeFaces** : [https://www.primefaces.org/](https://www.primefaces.org/)
+- Documentation officielle JSF
+- Documentation JPA/Hibernate
+
+## Structure du Projet
+src/
+├── main/
+│   ├── java/
+│   │   └── ma.fstt.atelier3/
+│   │       ├── beans/
+│   │       │   ├── CartBean.java
+│   │       │   ├── ProductBean.java
+│   │       │   └── ProductManager.java
+│   │       ├── init/
+│   │       │   └── DatabaseInitializer.java
+│   │       ├── model/
+│   │       │   ├── CartItem.java
+│   │       │   └── Product.java
+│   │       └── service/
+│   │           ├── ProductService.java
+│   │           └── HelloServlet.java
+│   ├── resources/
+│   │   └── META-INF/
+│   │       ├── beans.xml
+│   │       └── persistence.xml
+│   └── webapp/
+│       ├── META-INF/
+│       ├── WEB-INF/
+│       │   ├── beans.xml
+│       │   ├── h2-ds.xml
+│       │   └── web.xml
+│       ├── cart.xhtml
+│       ├── index.xhtml
+│       └── products.xhtml
+
+## Installation et Démarrage
+
+1. Cloner le projet
+2. Configurer la base de données MySQL
+3. Mettre à jour les paramètres de connexion dans `persistence.xml`
+4. Compiler le projet avec Maven : `mvn clean install`
+5. Déployer le WAR généré sur Wildfly
+6. Accéder à l'application via le navigateur
+
